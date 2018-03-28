@@ -16,7 +16,7 @@
         <entry file="file://$PROJECT_DIR$/GridWorld.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="329">
-              <caret line="125" column="33" lean-forward="true" selection-start-line="111" selection-start-column="0" selection-end-line="125" selection-end-column="33" />
+              <caret line="125" column="33" lean-forward="false" selection-start-line="111" selection-start-column="0" selection-end-line="125" selection-end-column="33" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -48,7 +48,7 @@
         <entry file="file://$PROJECT_DIR$/grid_world_board.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-867">
-              <caret line="27" column="22" lean-forward="true" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="22" />
+              <caret line="27" column="22" lean-forward="false" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="22" />
               <folding>
                 <element signature="e#722#740#0" expanded="true" />
               </folding>
@@ -366,7 +366,7 @@
     <entry file="file://$PROJECT_DIR$/GridWorld.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="329">
-          <caret line="125" column="33" lean-forward="true" selection-start-line="111" selection-start-column="0" selection-end-line="125" selection-end-column="33" />
+          <caret line="125" column="33" lean-forward="false" selection-start-line="111" selection-start-column="0" selection-end-line="125" selection-end-column="33" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -376,7 +376,7 @@
     <entry file="file://$PROJECT_DIR$/grid_world_board.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-867">
-          <caret line="27" column="22" lean-forward="true" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="22" />
+          <caret line="27" column="22" lean-forward="false" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="22" />
           <folding>
             <element signature="e#722#740#0" expanded="true" />
           </folding>
