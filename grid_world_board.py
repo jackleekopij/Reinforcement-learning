@@ -38,7 +38,7 @@ class Tile:
 
     borderColor = pygame.Color('black')
     borderWidth = 4  # the pixel width of the tile border
-    image = pygame.image.load('RL_mike.png')
+    image = pygame.image.load('RL_saltmarsh.jpg')
     image = pygame.transform.scale(image, (100, 100))
 
     def __init__(self, x, y, wall, surface, tile_size = (100,100)):
@@ -197,12 +197,26 @@ if __name__ == "__main__":
     ####
 
     # Set up the grid world #
+    #pygame.font.init()  # you have to call this at the start,
+    # if you want to use this module.
+
+
+
 
     ####
     # Initialize pygame
     pygame.init()
 
     # Set window size and title, and frame delay
+
+    myfont = pygame.font.SysFont('Comic Sans MS', 30)
+
+    def getRenderedText(text, myfont=myfont):
+        rounded_text = math.ceil(text)
+        return myfont.render(str(rounded_text), 1,(0,0,0))
+
+
+    rendered_text = myfont.render("Jack", 1,(0,0,0))
 
     surfaceSize = (1000, 600)
     windowTitle = 'Grid_World'
@@ -227,6 +241,12 @@ if __name__ == "__main__":
     gameOver = False
 
     # Set goal to be dependent on the height and width of the grid.
+#TODO:  Create a reward matrix which is dependent on input dimensions of grid, not hard code.
+# Initialise matrix to -1, for 'impossible' moves, 0 for possible moves and 100 for transtion to goal state
+    R = np.matrix.ones((grid_dimension[0], grid_dimension[1])) * (-1)
+
+    # Set goal at point
+    Goal_loc = [3,3,]
 
     R = np.matrix([[-1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
                    [0, -1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -296,9 +316,10 @@ if __name__ == "__main__":
         max_value = Q[action, max_index]
 
         Q[current_state, action] = R[current_state, action] + gamma * max_value
-        print('max_value', R[current_state, action] + gamma * max_value)
+        print("the Q_matrix is: {0}".format(Q))
 
         if (np.max(Q) > 0):
+            print(Q)
             return (np.sum(Q / np.max(Q) * 100))
         else:
             return (0)
@@ -316,42 +337,70 @@ if __name__ == "__main__":
     counter = 0
     for i in range(1000):
         # Pattern:
-        #   Find current state -> availabel act -> pick action -> update q value
+        #   Find current state -> available act -> pick action -> update q value
         current_state = np.random.randint(0, int(Q.shape[0]))
         available_act = available_actions(current_state)
         if len(available_act) > 0:
             action = sample_next_action(available_act)
             score = update(current_state, action, gamma)
             scores.append(score)
-        print(i % 50)
-        if i % 10 == 0:
+
+
+        if i % 25 == 0 and i != 0:
             counter += 1
-            print("Sample for the {0} sim ".format(i))
 
             board = Grid_World(surface,grid_dimension_int, goal_coord=goal_cell)
 
             # Draw objects
             board.draw()
 
+
+
             # Refresh the display
             pygame.display.update()
 
             my_action = 2
 
-
+            print("Q matrix for the {0}ith iteration:  {0}".format(Q))
 
             # Loop forever
             while True:
                 # Handle events
+
                 for event in pygame.event.get():
                     if event.type == QUIT:
+                        print("Goal achieved")
                         pygame.quit()
                         sys.exit()
                         # Handle additional events
 
                 # Update and draw objects for next frame
+
+
                 gameOver = board.update()
-                print("The current position: {0}".format(board.position))
+
+                # First column
+                surface.blit(getRenderedText(np.max(Q[12,])), (30,   40))
+                surface.blit(getRenderedText(np.max(Q[8,])), (30,  140))
+                surface.blit(getRenderedText(np.max(Q[0,])), (30,  340))
+
+                # Second column
+                surface.blit(getRenderedText(np.max(Q[13,])), (130,  40))
+                surface.blit(getRenderedText(np.max(Q[9,])), (130, 140))
+                surface.blit(getRenderedText(np.max(Q[1,])), (130, 340))
+
+
+                # Third column
+                surface.blit(getRenderedText(np.max(Q[14,])), (230,  40))
+                surface.blit(getRenderedText(np.max(Q[10,])), (230, 140))
+                surface.blit(getRenderedText(np.max(Q[6,])), (230, 240))
+                surface.blit(getRenderedText(np.max(Q[3,])), (230, 340))
+
+                # Fourth column
+                surface.blit(getRenderedText(np.max(Q[11,])), (330, 140))
+                surface.blit(getRenderedText(np.max(Q[3,])), (330, 340))
+
+
 
                 prev_position = board.position
 
@@ -359,12 +408,14 @@ if __name__ == "__main__":
                 # My code
                 one_dimension_board = board.position[0] * grid_dimension_int[1] + board.position[1]
                 new_action = my_action
-                print("The one dimension board is: {0}".format(one_dimension_board))
+
                 av_actions = Q[one_dimension_board,]
                 transition_state = np.argmax(Q[one_dimension_board,])
-                print("The possible actions {0}".format(Q[one_dimension_board,]))
-                print("The transition state {0}".format(transition_state))
-                print("THe max value of Q[state,]: {0}".format(np.max(Q[one_dimension_board,])))
+                print("The row to look up in the Q-matrix:  {0}".format(one_dimension_board))
+                print("The available transition states: {0}".format(Q[one_dimension_board,]))
+                #print("The board state is: {0}".format(one_dimension_board))
+                #print("The transition action {0}".format(transition_state))
+                #print("The max value of Q[state,]: {0}".format(np.max(Q[one_dimension_board,])))
                 if((transition_state - one_dimension_board) > 1):
                     new_action = 0
                 if ((transition_state - one_dimension_board) < 1):
@@ -376,23 +427,14 @@ if __name__ == "__main__":
                 if ((transition_state - one_dimension_board) == 0) or np.max(Q[one_dimension_board,]) <= 0.0:
                     new_action = np.random.choice(4,1)[0]
 
-
-
-                print("The action is {0}".format(new_action))
-                #if prev_position == board.position:
-                #    while new_action == my_action:
-                #        new_action = np.random.choice(4,1)[0]
-                #        print("The new action {0}".format(new_action))
-
-
-
-
                 if gameOver:
                     break
 
                 # Refresh the display
                 board.step(new_action)
                 pygame.display.update()
+
+
 
                 my_action = new_action
 
