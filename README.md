@@ -10,3 +10,7 @@ Exploration of basic concepts of reinforcement learning.
       Value evaluation of a policy. 
     *Model free control* 
       Search for optimal policy - policy evaluation and improvement.
+
+
+References:
+    Q learning crawler robot: https://www.youtube.com/watch?v=kEnAvPg61Ps
