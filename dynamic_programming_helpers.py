@@ -59,3 +59,9 @@ def reset_goal_values(grid_values, goals_dim):
     for goal in goals_dim:
         grid_values[goal[0],goal[1]] = 0
     return grid_values
+
+
+
+
+def print_unpadded_matrix(value_matrix, GRID_DIM):
+    return value_matrix[1:GRID_DIM+1,1:GRID_DIM+1]
