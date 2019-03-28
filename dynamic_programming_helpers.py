@@ -65,3 +65,22 @@ def reset_goal_values(grid_values, goals_dim):
 
 def print_unpadded_matrix(value_matrix, GRID_DIM):
     return value_matrix[1:GRID_DIM+1,1:GRID_DIM+1]
+
+
+
+
+def pretty_print_matrix(value_matrix, CANVAS_HEIGHT_WIDTH, GRID_DIM, label_offset, line_distance):
+    master = Tk()
+    canvas_width = CANVAS_HEIGHT_WIDTH
+    canvas_height = CANVAS_HEIGHT_WIDTH
+    w = Canvas(master,
+               width=canvas_width,
+               height=canvas_height)
+    w.pack()
+
+    for j in range(GRID_DIM):
+        for i in range(GRID_DIM):
+            w.create_text(label_offset + i * line_distance, label_offset + j * line_distance, fill="darkblue",
+                          font="Times 20 italic bold",
+                          text=str(value_matrix[j+1,i+1]))
+    return [w, canvas_height, canvas_width]
