@@ -13,4 +13,6 @@ Exploration of basic concepts of reinforcement learning.
 
 
 References:
+    
     Q learning crawler robot: https://www.youtube.com/watch?v=kEnAvPg61Ps
+    Code examples for Q learning crawler: https://www.robotshop.com/community/robots/show/q-learning-machine-learning-crawling-robot
