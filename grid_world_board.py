@@ -243,7 +243,7 @@ if __name__ == "__main__":
     # Set goal to be dependent on the height and width of the grid.
 #TODO:  Create a reward matrix which is dependent on input dimensions of grid, not hard code.
 # Initialise matrix to -1, for 'impossible' moves, 0 for possible moves and 100 for transtion to goal state
-    R = np.matrix.ones((grid_dimension[0], grid_dimension[1])) * (-1)
+    R = np.ones((grid_dimension_int[0], grid_dimension_int[1])) * (-1)
 
     # Set goal at point
     Goal_loc = [3,3,]
