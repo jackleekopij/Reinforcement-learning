@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from random import randint
 
 # Windy-world is an environment of discrete states (the example used will be a the classic 7x10 grid).
 # For each of the columns there is a 'wind' that pushes the agent up by a varying magnitude.
@@ -16,8 +17,15 @@ Environment notes:
 # SET PARAMETERS
 GRID_DIM = [7,10]
 QMATRIX = np.zeros(GRID_DIM)
+EPSILON = 0.05
 NUM_EPISODES = 100
+BOARD_DIM = [7,10]
+INIT_STATE = [3,0]
+GOAL_STATE = [5,8]
 
+
+# ACTIONS = {"UP":[0,1], "DOWN":[0,-1], "LEFT":[-1,0], "RIGHT":[]}
+ACTIONS = [[0,1], [0,-1], [-1,0], [1,0]]
 
 
 # Create environment (wind world)
@@ -48,60 +56,88 @@ class wind_world():
         current_state[1] = max(current_state[1], 0)
         return current_state
 
-    def update_state(self, agent_action, prev_state):
+    def next_state(self, agent_action, prev_state):
         '''
         Return a vector of the agents state after taking a move in the environment
         :param agent_action: a 2d list to add to the previous state.
         :param prev_state: a 2d list of the previous state.
         :return: updated state to without the environments wind effect
         '''
-        current_col = prev_state[0] + agent_action[0]
-        current_col_wind_effect = self.wind_vector[current_col]
-        current_state = [current_col, prev_state[1] + current_col_wind_effect + agent_action[1]]
+        current_col = prev_state[1] + agent_action[1]
+        current_row_wind_effect = self.wind_vector[current_col]
+        current_state = [prev_state[0] + current_row_wind_effect + agent_action[0], current_col]
         current_state = self.boundary_state_check(current_state)
-        print("Current state: {}".format(current_state))
         return current_state
 
-    def calc_reward(self):
-        '''
-        Function to calculate the returns for environment. Penalise if the agent doesn't transition into the goal state
-        :return:
-        '''
-        if self.current_state == self.goal_state:
-            return 100
-        else:
-            return -1
 
-
-
+def calc_reward(current_state, GOAL_STATE):
+    '''
+    Function to calculate the returns for environment. Penalise if the agent doesn't transition into the goal state
+    :return:
+    '''
+    if current_state == GOAL_STATE:
+        return 100
+    else:
+        return 0
 
 
 
 
 # SARSA agent function
-'''
-class SARSA_agent():
-    def __init__(self):
-    def
-'''
+# Create a SARSA policy agent with an epsilon greedy algorithm.
+def SARSA_agent(Qmatrix, current_state, goal_state, ACTIONS, ALPHA, EPSILON, GOAL_STATE):
+    # One step look ahead
+    unraveled_current_state = np.ravel_multi_index(current_state,BOARD_DIM)
+    action = egreedy_action(Qmatrix, unraveled_current_state, EPSILON)
+    # Two step look ahead
+    reward = calc_reward(current_state,GOAL_STATE)
+    state_prime = next_
+
+        Qmatrix[current_state][action] = Qmatrix[unraveled_current_state][action] + ALPHA*(reward + GAMMA*Qmatrix[unraveled_prime_state])
+
+
+def egreedy_action(Qmatrix, state,EPSILON):
+    if (np.random.rand < EPSILON):
+        action = randint(0, 3)
+    else:
+        action = np.argmax(Qmatrix[state])
+
+
 
 
 
 # main function
 if __name__ == "__main__":
     # Create wind_env object
-    # TODO: create gym enovironmen for windy world for reuse
-    wind_env = wind_world(wind_vector=[0,0,0,1,1,1,2,2,1,0], board_dim=[7,10], start_state=[0,0], goal_state=[5,8])
+    # TODO: create gym enovironment for windy world for reuse.
+    # Added additional wind value as a buffer for agent sampling states above 10
+    wind_env = wind_world(wind_vector=[0,0,0,1,1,1,2,2,1,0,0], board_dim=BOARD_DIM, start_state=[0,0], goal_state=GOAL_STATE)
 
+    # Initialise Q-matrix
+    num_states = BOARD_DIM[0] * BOARD_DIM[1]
+    num_actions = len(ACTIONS)
+    Qmatrix = np.zeros([num_states,num_actions])
+
+    current_state = INIT_STATE
 
     # Training loop:
     for i in range(NUM_EPISODES):
-        wind_env.update_state([-1,-1], [0,0])
-        break
+        print("Current state pre update: {}".format(current_state))
+        current_state = wind_env.next_state(ACTIONS[0], current_state)
+
+        print("Current state post update: {}".format(current_state))
+        print(i)
+
+        if i > 10:
+            break
+
         i += 1
 
         # Create function to calculate Q
         # A 70 by 4 matrix
 
-        
+    # Calculate row of Q matrix to update
+    print("index of q-matrix: {}".format(np.ravel_multi_index(current_state,BOARD_DIM)))
+
+
     # Training output:
