@@ -22,10 +22,11 @@ NUM_EPISODES = 100
 BOARD_DIM = [7,10]
 INIT_STATE = [3,0]
 GOAL_STATE = [5,8]
-
-
 # ACTIONS = {"UP":[0,1], "DOWN":[0,-1], "LEFT":[-1,0], "RIGHT":[]}
 ACTIONS = [[0,1], [0,-1], [-1,0], [1,0]]
+
+
+
 
 
 # Create environment (wind world)
@@ -85,15 +86,22 @@ def calc_reward(current_state, GOAL_STATE):
 
 # SARSA agent function
 # Create a SARSA policy agent with an epsilon greedy algorithm.
-def SARSA_agent(Qmatrix, current_state, goal_state, ACTIONS, ALPHA, EPSILON, GOAL_STATE):
+def SARSA_agent(wind_env, Qmatrix, current_state, goal_state, ACTIONS, ALPHA, EPSILON, GAMMA, GOAL_STATE):
     # One step look ahead
     unraveled_current_state = np.ravel_multi_index(current_state,BOARD_DIM)
     action = egreedy_action(Qmatrix, unraveled_current_state, EPSILON)
     # Two step look ahead
     reward = calc_reward(current_state,GOAL_STATE)
-    state_prime = next_
 
-        Qmatrix[current_state][action] = Qmatrix[unraveled_current_state][action] + ALPHA*(reward + GAMMA*Qmatrix[unraveled_prime_state])
+    state_prime = wind_env.next_state(ACTIONS[action], current_state)
+    unraveled_prime_state = np.ravel_multi_index(state_prime,BOARD_DIM)
+    prime_action = egreedy_action(Qmatrix, unraveled_prime_state, EPSILON)
+
+    Qmatrix[unraveled_current_state][action] +=   ALPHA*(reward + GAMMA*Qmatrix[unraveled_prime_state][prime_action] - Qmatrix[unraveled_current_state][action])
+
+    return Qmatrix
+
+
 
 
 def egreedy_action(Qmatrix, state,EPSILON):
