@@ -16,9 +16,7 @@ Environment notes:
 # SET PARAMETERS
 GRID_DIM = [7,10]
 QMATRIX = np.zeros(GRID_DIM)
-
-
-
+NUM_EPISODES = 100
 
 
 
@@ -34,8 +32,23 @@ class wind_world():
         self.goal = goal_state
         print("The board dimension is: {}".format(board_dim))
 
+    def boundary_state_check(self, current_state):
+        '''
+        boundary_state_check constrains the agent to eligible moves by constraining moves that would otherwise have the agent
+        transition outside of the boundary.
+        :param dims: the dimensions of the windy world board.
+        :return: a state vector after boundary analysis of the agent.
+        '''
+        # calc the horizontal boundaries of the windy world board
+        current_state[0] = min(current_state[0], self.board_dim[0]-1)
+        current_state[0] = max(current_state[0], 0)
 
-    def update_state(self, agent_action, prev_state, wind_vector):
+        # calc the vertical boundaries of the windy world board
+        current_state[1] = min(current_state[1], self.board_dim[1]-1)
+        current_state[1] = max(current_state[1], 0)
+        return current_state
+
+    def update_state(self, agent_action, prev_state):
         '''
         Return a vector of the agents state after taking a move in the environment
         :param agent_action: a 2d list to add to the previous state.
@@ -43,8 +56,11 @@ class wind_world():
         :return: updated state to without the environments wind effect
         '''
         current_col = prev_state[0] + agent_action[0]
-        current_col_wind_effect = wind_vector[current_col]
-        return [current_col, prev_state[1] + current_col_wind_effect + agent_action[1]]
+        current_col_wind_effect = self.wind_vector[current_col]
+        current_state = [current_col, prev_state[1] + current_col_wind_effect + agent_action[1]]
+        current_state = self.boundary_state_check(current_state)
+        print("Current state: {}".format(current_state))
+        return current_state
 
     def calc_reward(self):
         '''
@@ -56,12 +72,36 @@ class wind_world():
         else:
             return -1
 
+
+
+
+
+
+
 # SARSA agent function
+'''
 class SARSA_agent():
     def __init__(self):
     def
+'''
+
+
 
 # main function
 if __name__ == "__main__":
-    wind_env = wind_world(wind_vector=[2,3], board_dim=[4,5], start_state=[0,0])
-    print(wind_en)
+    # Create wind_env object
+    # TODO: create gym enovironmen for windy world for reuse
+    wind_env = wind_world(wind_vector=[0,0,0,1,1,1,2,2,1,0], board_dim=[7,10], start_state=[0,0], goal_state=[5,8])
+
+
+    # Training loop:
+    for i in range(NUM_EPISODES):
+        wind_env.update_state([-1,-1], [0,0])
+        break
+        i += 1
+
+        # Create function to calculate Q
+        # A 70 by 4 matrix
+
+        
+    # Training output:
